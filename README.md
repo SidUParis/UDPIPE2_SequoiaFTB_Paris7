@@ -103,12 +103,12 @@ Email: xu.sun@etu.u-paris.fr
     print(tf.test.is_gpu_available())
     ```
 
-4. UDPIPE2 processes embeddings for all `.conllu` files in a folder. Here’s how to process them one by one:
+4. UDPIPE2 can process embeddings for all .conllu files in a folder using the compute_embedding.sh script provided in the original UDPIPE2 GitHub repository. To avoid memory explosion errors, we compute embeddings one by one and remove each after usage. Here’s how to process them individually:
     ```sh
     python3 compute_wembeddings.py --format=conllu YOUR_FILE.conllu YOUR_FILE.conllu.npz
     ```
 
-5. After computing the embeddings, you will have a `.npz` file in the same directory as your original `.conllu` file. For example:
+5. After computing the embeddings, you will have a `.conllu.npz` file in the same directory as your original `.conllu` file.For example:
     ```sh
     ls
     sequoiaftb.mwe_reg.surf.dev.conllu
@@ -116,6 +116,7 @@ Email: xu.sun@etu.u-paris.fr
     sequoiaftb.mwe_reg.surf.train.conllu
     sequoiaftb.mwe_reg.surf.train.conllu.npz
     ```
+6. The .npz files are the embedding files used during training and prediction. They must have the same prefix as the original .conllu file. For example, if the input is sequoiaftb.mwe_reg.surf.dev.conllu, ensure there is an embedding file named sequoiaftb.mwe_reg.surf.dev.conllu.npz. Otherwise, errors will occur. **Be careful when defining the argument in step 4!**
 
 ## Training
 
@@ -138,7 +139,7 @@ Email: xu.sun@etu.u-paris.fr
 
 ## Prediction
 
-Now that you have a trained model saved in the `MODEL_LR_0.001_DP_0.4_EPOCHS_20_SEQUOIAFTB` folder, you can use it for parsing.
+Now that you have a trained model saved in the `MODEL_LR_0.001_DP_0.4_EPOCHS_20_SEQUOIAFTB` folder, you can use it for parsing and tagging.
 
 1. Ensure your new data is in the `.conllu` format. Convert any other formats (e.g., `.txt`) to `.conllu`.
     - Hint: Manually create a null `.conllu` file following the `.conllu` format with no values, only `-` or `null`.
@@ -149,6 +150,7 @@ Now that you have a trained model saved in the `MODEL_LR_0.001_DP_0.4_EPOCHS_20_
     ```sh
     python ./udpipe2.py MODEL_PATH --predict --predict_input DATASET_PATH/YOUR_FILE.conllu --predict_output DESIRED_PATH/FILENAME
     ```
+    *The MODEL_PATH is the folder where you save your model. For example, if you download a model named MODEL_LR_0.001_DP_0.4_EPOCHS_20_SEQUOIAFTB, this folder will contain checkpoints, model binaries, etc. The MODEL_PATH is the directory to this folder.*
 
     - Replace `MODEL_PATH` with your trained UDPIPE2 model path.
     - Replace `DATASET_PATH/YOUR_FILE.conllu` with your input data path. Ensure the `.conllu` file has a corresponding `.npz` file in the same directory.
