@@ -1,2 +1,6 @@
 *.data-0* filter=lfs diff=lfs merge=lfs -text
 mappings.pickle filter=lfs diff=lfs merge=lfs -text
+*data-0000*
+ filter=lfs diff=lfs merge=lfs -text
+*.data-00* filter=lfs diff=lfs merge=lfs -text
+mappings.* filter=lfs diff=lfs merge=lfs -text
